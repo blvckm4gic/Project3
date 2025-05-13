@@ -1,18 +1,15 @@
 async function loadPost(index, imageUrl) {
     try {
-        // Загружаем данные с API
         const response = await fetch('https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=xnTBQUNTE6hxNFT5jfAqxd4lhYLkNeGp');
         const data = await response.json();
 
-        // Проверяем, что индекс в пределах массива
         const post = data.response.docs[index];
         
         if (post) {
-            // Если передан URL изображения, используем его, если нет - подставляем заглушку
-            const image = imageUrl ? imageUrl : 'img/big-photo.png';  // Заглушка, если нет изображения
+            
+            const image = imageUrl ? imageUrl : 'img/big-photo.png';  
             console.log(post.lead_paragraph);
 
-            // Строим HTML для отображения данных поста
             const postDetails = `
                 <div class="profile">
                     <img src="img/avatar.png" alt="" class="avatar">
@@ -55,8 +52,6 @@ async function loadPost(index, imageUrl) {
                     </div>
                 </div>
             `;
-
-            // Вставляем данные в контейнер
             document.getElementById('post-details-container').innerHTML = postDetails;
         } else {
             document.getElementById('post-details-container').innerHTML = "Post not found!";
@@ -67,14 +62,13 @@ async function loadPost(index, imageUrl) {
     }
 }
 
-// Когда страница загружена, извлекаем параметры "post" и "imageUrl" из URL и загружаем соответствующий пост
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const postIndex = urlParams.get('post');  // Индекс поста из URL
-    const imageUrl = urlParams.get('imageUrl');  // URL изображения из URL
+    const postIndex = urlParams.get('post');
+    const imageUrl = urlParams.get('imageUrl');
 
     if (postIndex !== null) {
-        loadPost(postIndex, imageUrl);  // Загружаем пост по индексу и URL изображения
+        loadPost(postIndex, imageUrl);
     } else {
         document.getElementById('post-details-container').innerHTML = "No post selected!";
     }
